@@ -23,9 +23,8 @@ class KinesisVideoStream:
             raise(er)
 
     def create_channel(self):
-        client = boto3.client('kinesisvideo')
         try:
-            client.create_signaling_channel(
+            self.kvs_client.create_signaling_channel(
             ChannelName=self.channel_name,
             ChannelType='SINGLE_MASTER',
             SingleMasterConfiguration={
