@@ -38,7 +38,7 @@ class KinesisVideoStream:
     def delete_channel(self):
         response = self.describe_channel(self.channel_name)
         if response == False:
-            return False # this channel not exists
+            return False 
         else:
             channel_info = response['ChannelInfo']
             channel_version = channel_info['Version']
@@ -49,13 +49,10 @@ class KinesisVideoStream:
                 ChannelARN=channel_arn,
                 CurrentVersion=channel_version
                 )
-                return True # this channel is deleted
-            
+                return True 
             except botocore.exceptions.ClientError as error:
-                # this channel is current in use
                 if error.response['Error']['Code'] == 'ResourceInUseException':
                     pass
-                #    raise(ChannelInUseException)
                 else:
                     raise(error)
                 
