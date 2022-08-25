@@ -6,11 +6,11 @@ from botocore.exceptions import ClientError
 class KinesisVideoStream:
     def __init__(self, channel_name):
         self.channel_name = channel_name
+        self.kvs_client = boto3.client('kinesisvideo')
 
     def describe_chanenel(self):
-        client = boto3.client('kinesisvideo')
         try :
-            response = client.describe_signaling_chanenel(
+            response = self.kvs_client.describe_signaling_chanenel(
                 ChannelName=self.channel_name
             )
             return response
@@ -37,7 +37,6 @@ class KinesisVideoStream:
             raise(er)
 
     def delete_channel(self):
-        client = boto3.client('kinesisvideo')
         response = self.describe_channel(self.channel_name)
         if response == False:
             return False # this channel not exists
@@ -47,7 +46,7 @@ class KinesisVideoStream:
             channel_arn = channel_info['ChannelARN']
             
             try:
-                client.delete_signaling_channel(
+                self.kvs_client.delete_signaling_channel(
                 ChannelARN=channel_arn,
                 CurrentVersion=channel_version
                 )
